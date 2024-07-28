@@ -1,0 +1,30 @@
+# Print the USER and PID columns
+ps aux | awk '{print $1, $2}'
+
+
+# Print lines where the CPU usage is greater than 10%
+ps aux | awk '$3 > 10 {print}'
+
+# Print processes of user 'root'
+ps aux | awk '$1 == "root" {print}'
+
+ Format the output with headers
+ps aux | awk 'BEGIN {print "USER\t\tPID\t%CPU\t%MEM\tCOMMAND"} {print $1, "\t", $2, "\t", $3, "\t", $4, "\t", $11}'
+
+------------------------------
+
+ find -type f -name "*.txt"
+
+#Objective: Find .txt files modified within the last 7 days
+
+ find -type f -name "*.txt" -mtime -7
+
+Objective: Find .txt files larger than 1 MB.
+
+
+find -type f -name "*.txt" -size +1M
+
+----------------------------------------------------------
+
+
+

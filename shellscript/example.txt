@@ -1,0 +1,4 @@
+user1 vm1 Ubuntu 22.04 20.04
+user3 vm3 Debian 10
+user4 vm4 Fedora 33
+user5 vm5 RHEL 8

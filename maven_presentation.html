@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maven Commands & POM.xml Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin: 25px 0 15px 0;
+        }
+
+        p, li {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 30px;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 1.2em;
+            color: #764ba2;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.5em;
+            margin-top: 10px;
+        }
+
+        .section-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .lifecycle-phase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 10px 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>Maven Commands & POM.xml</h1>
+            <p class="subtitle">Complete Guide to Maven Build Lifecycle and Project Configuration</p>
+            <div style="margin-top: 80px; text-align: center;">
+                <img src="https://maven.apache.org/images/maven-logo-black-on-white.png" alt="Maven" style="max-width: 400px;">
+            </div>
+            <div style="margin-top: 60px;">
+                <h3 style="text-align: center;">Topics Covered:</h3>
+                <ul style="font-size: 1.4em; margin-top: 30px;">
+                    <li>Maven Clean Command</li>
+                    <li>Maven Package Command</li>
+                    <li>Maven Test Command</li>
+                    <li>Maven Validate Command</li>
+                    <li>POM.xml Structure & Sections</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2: Maven Clean -->
+        <div class="slide">
+            <div class="slide-number">2 / 10</div>
+            <h2>maven clean</h2>
+            
+            <h3>What it does:</h3>
+            <p>Removes all files generated during the previous build from the <span class="highlight">target</span> directory.</p>
+            
+            <div class="code-block">mvn clean</div>
+            
+            <h3>When to use:</h3>
+            <ul>
+                <li>Before starting a fresh build</li>
+                <li>When you want to ensure no old artifacts remain</li>
+                <li>To troubleshoot build issues caused by stale files</li>
+                <li>Before deploying to production</li>
+            </ul>
+            
+            <div class="section-box">
+                <h3>What gets deleted:</h3>
+                <ul>
+                    <li>Compiled .class files</li>
+                    <li>JAR/WAR files</li>
+                    <li>Test reports</li>
+                    <li>Generated resources</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 3: Maven Package -->
+        <div class="slide">
+            <div class="slide-number">3 / 10</div>
+            <h2>maven package</h2>
+            
+            <h3>What it does:</h3>
+            <p>Compiles your code, runs tests, and packages the compiled code into a distributable format (JAR, WAR, EAR).</p>
+            
+            <div class="code-block">mvn package</div>
+            
+            <h3>Build Lifecycle Phases Executed:</h3>
+            <div style="margin: 20px 0;">
+                <span class="lifecycle-phase">validate</span>
+                <span class="lifecycle-phase">compile</span>
+                <span class="lifecycle-phase">test</span>
+                <span class="lifecycle-phase">package</span>
+            </div>
+            
+            <div class="section-box">
+                <h3>Output:</h3>
+                <ul>
+                    <li>Creates a <span class="highlight">JAR</span> file (for Java applications)</li>
+                    <li>Creates a <span class="highlight">WAR</span> file (for web applications)</li>
+                    <li>Located in the <span class="highlight">target/</span> directory</li>
+                    <li>Named as: <span class="highlight">artifactId-version.jar</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4: Maven Test -->
+        <div class="slide">
+            <div class="slide-number">4 / 10</div>
+            <h2>maven test</h2>
+            
+            <h3>What it does:</h3>
+            <p>Runs unit tests using the testing framework (JUnit, TestNG) configured in your project.</p>
+            
+            <div class="code-block">mvn test</div>
+            
+            <h3>Key Features:</h3>
+            <ul>
+                <li>Executes all test classes in <span class="highlight">src/test/java</span></li>
+                <li>Does not package the application</li>
+                <li>Generates test reports in <span class="highlight">target/surefire-reports</span></li>
+                <li>Fails the build if any test fails</li>
+            </ul>
+            
+            <div class="section-box">
+                <h3>Skip Tests:</h3>
+                <div class="code-block">mvn package -DskipTests</div>
+                <p style="margin-top: 15px;">Compiles tests but doesn't run them</p>
+                
+                <div class="code-block">mvn package -Dmaven.test.skip=true</div>
+                <p style="margin-top: 15px;">Skips both compilation and execution of tests</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Maven Validate -->
+        <div class="slide">
+            <div class="slide-number">5 / 10</div>
+            <h2>maven validate</h2>
+            
+            <h3>What it does:</h3>
+            <p>Validates that the project structure is correct and all necessary information is available.</p>
+            
+            <div class="code-block">mvn validate</div>
+            
+            <h3>Validation Checks:</h3>
+            <ul>
+                <li>POM.xml syntax is correct</li>
+                <li>Required project information is present</li>
+                <li>Project dependencies are resolvable</li>
+                <li>Plugin configurations are valid</li>
+                <li>Project structure follows Maven conventions</li>
+            </ul>
+            
+            <div class="section-box">
+                <h3>When to use:</h3>
+                <ul>
+                    <li>Before committing changes to version control</li>
+                    <li>To quickly check project configuration</li>
+                    <li>As part of CI/CD pipeline initial checks</li>
+                    <li>After modifying POM.xml</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 6: POM.xml Introduction -->
+        <div class="slide">
+            <div class="slide-number">6 / 10</div>
+            <h2>POM.xml - Project Object Model</h2>
+            
+            <h3>What is POM.xml?</h3>
+            <p>The <span class="highlight">Project Object Model (POM)</span> is the fundamental unit of work in Maven. It's an XML file that contains information about the project and configuration details used by Maven to build the project.</p>
+            
+            <div class="section-box">
+                <h3>Key Purposes:</h3>
+                <ul>
+                    <li>Defines project structure and metadata</li>
+                    <li>Manages project dependencies</li>
+                    <li>Configures build plugins</li>
+                    <li>Specifies project repositories</li>
+                    <li>Defines build profiles</li>
+                </ul>
+            </div>
+            
+            <div class="code-block">&lt;project xmlns="http://maven.apache.org/POM/4.0.0"&gt;
+    &lt;!-- POM content goes here --&gt;
+&lt;/project&gt;</div>
+        </div>
+
+        <!-- Slide 7: POM.xml Basic Elements -->
+        <div class="slide">
+            <div class="slide-number">7 / 10</div>
+            <h2>POM.xml - Basic Elements</h2>
+            
+            <div class="code-block">&lt;project&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;description&gt;A sample application&lt;/description&gt;
+&lt;/project&gt;</div>
+            
+            <div class="section-box">
+                <h3>Element Descriptions:</h3>
+                <ul>
+                    <li><span class="highlight">modelVersion:</span> POM model version (always 4.0.0)</li>
+                    <li><span class="highlight">groupId:</span> Organization/group identifier</li>
+                    <li><span class="highlight">artifactId:</span> Project name/identifier</li>
+                    <li><span class="highlight">version:</span> Project version</li>
+                    <li><span class="highlight">packaging:</span> Package type (jar, war, ear, pom)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 8: Dependencies Section -->
+        <div class="slide">
+            <div class="slide-number">8 / 10</div>
+            <h2>POM.xml - Dependencies Section</h2>
+            
+            <h3>Managing Project Dependencies:</h3>
+            <div class="code-block">&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+        &lt;version&gt;3.2.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    
+    &lt;dependency&gt;
+        &lt;groupId&gt;junit&lt;/groupId&gt;
+        &lt;artifactId&gt;junit&lt;/artifactId&gt;
+        &lt;version&gt;4.13.2&lt;/version&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</div>
+            
+            <div class="section-box">
+                <h3>Dependency Scopes:</h3>
+                <ul>
+                    <li><span class="highlight">compile:</span> Default, available in all classpaths</li>
+                    <li><span class="highlight">test:</span> Only for testing (JUnit, Mockito)</li>
+                    <li><span class="highlight">provided:</span> Expected by JDK or container</li>
+                    <li><span class="highlight">runtime:</span> Not needed for compilation</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 9: Build and Plugins Section -->
+        <div class="slide">
+            <div class="slide-number">9 / 10</div>
+            <h2>POM.xml - Build & Plugins</h2>
+            
+            <div class="code-block">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.11.0&lt;/version&gt;
+            &lt;configuration&gt;
+                &lt;source&gt;17&lt;/source&gt;
+                &lt;target&gt;17&lt;/target&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+        
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.0.0&lt;/version&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</div>
+            
+            <div class="section-box">
+                <h3>Common Plugins:</h3>
+                <ul>
+                    <li><span class="highlight">maven-compiler-plugin:</span> Compiles Java source</li>
+                    <li><span class="highlight">maven-surefire-plugin:</span> Runs unit tests</li>
+                    <li><span class="highlight">maven-jar-plugin:</span> Creates JAR files</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Complete POM Example -->
+        <div class="slide">
+            <div class="slide-number">10 / 10</div>
+            <h2>Complete POM.xml Structure</h2>
+            
+            <div class="code-block" style="font-size: 0.95em;">&lt;project&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    
+    &lt;!-- Project Coordinates --&gt;
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    
+    &lt;!-- Project Information --&gt;
+    &lt;name&gt;My Application&lt;/name&gt;
+    &lt;description&gt;Sample Maven Project&lt;/description&gt;
+    
+    &lt;!-- Properties --&gt;
+    &lt;properties&gt;
+        &lt;maven.compiler.source&gt;17&lt;/maven.compiler.source&gt;
+        &lt;maven.compiler.target&gt;17&lt;/maven.compiler.target&gt;
+        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
+    &lt;/properties&gt;
+    
+    &lt;!-- Dependencies --&gt;
+    &lt;dependencies&gt;...&lt;/dependencies&gt;
+    
+    &lt;!-- Build Configuration --&gt;
+    &lt;build&gt;
+        &lt;plugins&gt;...&lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;</div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            
+            if (n >= slides.length) currentSlide = slides.length - 1;
+            if (n < 0) currentSlide = 0;
+            
+            slides[currentSlide].classList.add('active');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+            
+            if (currentSlide === slides.length - 1) {
+                nextBtn.textContent = 'End';
+            } else {
+                nextBtn.textContent = 'Next →';
+            }
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            showSlide(currentSlide);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        showSlide(currentSlide);
+    </script>
+</body>
+</html>

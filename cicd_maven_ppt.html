@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CI/CD & Maven - Build Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+        
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .slide {
+            background: white;
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin: 20px 0 15px 0;
+        }
+        
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        ul {
+            margin: 20px 0 20px 40px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin: 15px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .code {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+        
+        .card h4 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #999;
+            font-size: 1em;
+        }
+        
+        .center {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .pipeline {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+        }
+        
+        .pipeline-step {
+            background: #667eea;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 150px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            right: -30px;
+            font-size: 2em;
+            color: #667eea;
+        }
+        
+        .pipeline-step:last-child::after {
+            content: '';
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <div class="center">
+                <h1>CI/CD Build Tools & Maven</h1>
+                <p class="subtitle">Modern DevOps Practices for Software Development</p>
+                <div style="margin-top: 50px; color: #666;">
+                    <p style="font-size: 1.2em;">Continuous Integration | Continuous Deployment | Build Automation</p>
+                </div>
+            </div>
+            <div class="slide-number">1 / 10</div>
+        </div>
+
+        <!-- Slide 2: What is CI/CD -->
+        <div class="slide">
+            <h2>What is CI/CD?</h2>
+            <div class="content">
+                <h3>Continuous Integration (CI)</h3>
+                <ul>
+                    <li>Automated process of integrating code changes from multiple developers</li>
+                    <li>Frequent merging to main branch (multiple times per day)</li>
+                    <li>Automated building and testing of code</li>
+                    <li>Early detection of integration issues</li>
+                </ul>
+                
+                <h3>Continuous Deployment (CD)</h3>
+                <ul>
+                    <li>Automated release of validated code to production</li>
+                    <li>Minimal manual intervention</li>
+                    <li>Faster time-to-market</li>
+                    <li>Reduced deployment risks</li>
+                </ul>
+            </div>
+            <div class="slide-number">2 / 10</div>
+        </div>
+
+        <!-- Slide 3: CI/CD Pipeline -->
+        <div class="slide">
+            <h2>CI/CD Pipeline</h2>
+            <div class="content">
+                <div class="pipeline">
+                    <div class="pipeline-step">Code Commit</div>
+                    <div class="pipeline-step">Build</div>
+                    <div class="pipeline-step">Test</div>
+                    <div class="pipeline-step">Deploy</div>
+                </div>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h4>Build Stage</h4>
+                        <p>Compile source code, resolve dependencies, create artifacts</p>
+                    </div>
+                    <div class="card">
+                        <h4>Test Stage</h4>
+                        <p>Unit tests, integration tests, security scans, code quality checks</p>
+                    </div>
+                    <div class="card">
+                        <h4>Deploy Stage</h4>
+                        <p>Deploy to staging/production, configuration management, rollback capability</p>
+                    </div>
+                    <div class="card">
+                        <h4>Monitor Stage</h4>
+                        <p>Performance monitoring, log analysis, user feedback, alerts</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">3 / 10</div>
+        </div>
+
+        <!-- Slide 4: Popular CI/CD Tools -->
+        <div class="slide">
+            <h2>Popular CI/CD Tools</h2>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <h4>Jenkins</h4>
+                        <p><strong>Open-source automation server</strong></p>
+                        <p>• Highly extensible with 1800+ plugins</p>
+                        <p>• Self-hosted solution</p>
+                        <p>• Pipeline as Code (Jenkinsfile)</p>
+                    </div>
+                    <div class="card">
+                        <h4>GitLab CI/CD</h4>
+                        <p><strong>Built-in CI/CD for GitLab</strong></p>
+                        <p>• Integrated with Git repository</p>
+                        <p>• YAML-based configuration</p>
+                        <p>• Auto DevOps features</p>
+                    </div>
+                    <div class="card">
+                        <h4>GitHub Actions</h4>
+                        <p><strong>Native GitHub CI/CD</strong></p>
+                        <p>• Workflow automation</p>
+                        <p>• Marketplace with pre-built actions</p>
+                        <p>• Matrix builds support</p>
+                    </div>
+                    <div class="card">
+                        <h4>CircleCI</h4>
+                        <p><strong>Cloud-based CI/CD platform</strong></p>
+                        <p>• Fast build times with caching</p>
+                        <p>• Docker support</p>
+                        <p>• Parallel job execution</p>
+                    </div>
+                </div>
+            </div>
+            <div class="slide-number">4 / 10</div>
+        </div>
+
+        <!-- Slide 5: More CI/CD Tools -->
+        <div class="slide">
+            <h2>Additional CI/CD Tools</h2>
+            <div class="content">
+                <div class="grid">
+                    <div class="card">
+                        <h4>Azure DevOps</h4>
+                        <p>Microsoft's comprehensive DevOps platform with pipelines, repos, and boards</p>
+                    </div>
+                    <div class="card">
+                        <h4>Travis CI</h4>
+                        <p>Cloud-based CI service for GitHub projects, great for open source</p>
+                    </div>
+                    <div class="card">
+                        <h4>Bamboo</h4>
+                        <p>Atlassian's CI/CD server, tight integration with Jira and Bitbucket</p>
+                    </div>
+                    <div class="card">
+                        <h4>TeamCity</h4>
+                        <p>JetBrains CI/CD server with powerful build management features</p>
+                    </div>
+                </div>
+                
+                <div class="highlight">
+                    <strong>Choosing the Right Tool:</strong> Consider team size, infrastructure (cloud vs self-hosted), existing toolchain, budget, and required integrations.
+                </div>
+            </div>
+            <div class="slide-number">5 / 10</div>
+        </div>
+
+        <!-- Slide 6: Introduction to Maven -->
+        <div class="slide">
+            <h2>Apache Maven Overview</h2>
+            <div class="content">
+                <h3>What is Maven?</h3>
+                <p style="font-size: 1.2em; margin: 20px 0;">Maven is a powerful build automation and project management tool primarily for Java projects.</p>
+                
+                <h3>Key Features</h3>
+                <ul>
+                    <li><strong>Convention over Configuration:</strong> Standard project structure</li>
+                    <li><strong>Dependency Management:</strong> Automatic download and version management</li>
+                    <li><strong>Build Lifecycle:</strong> Standardized build phases</li>
+                    <li><strong>Plugin Architecture:</strong> Extensible functionality</li>
+                    <li><strong>Project Object Model (POM):</strong> XML-based project configuration</li>
+                    <li><strong>Repository System:</strong> Central and local artifact storage</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Maven Central Repository:</strong> Largest collection of Java libraries with over 10 million artifacts
+                </div>
+            </div>
+            <div class="slide-number">6 / 10</div>
+        </div>
+
+        <!-- Slide 7: Maven Project Structure -->
+        <div class="slide">
+            <h2>Maven Project Structure</h2>
+            <div class="content">
+                <div class="code">
+my-project/
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/          # Application source code
+│   │   ├── resources/     # Application resources
+│   │   └── webapp/        # Web application files
+│   └── test/
+│       ├── java/          # Test source code
+│       └── resources/     # Test resources
+└── target/                # Built artifacts
+                </div>
+                
+                <h3>Standard Directory Layout Benefits</h3>
+                <ul>
+                    <li>Immediate familiarity for developers</li>
+                    <li>Simplified build configuration</li>
+                    <li>Better IDE integration</li>
+                    <li>Consistent project organization across teams</li>
+                </ul>
+            </div>
+            <div class="slide-number">7 / 10</div>
+        </div>
+
+        <!-- Slide 8: Maven POM.xml -->
+        <div class="slide">
+            <h2>Project Object Model (POM)</h2>
+            <div class="content">
+                <div class="code" style="font-size: 0.9em;">
+&lt;project&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;my-app&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.13.2&lt;/version&gt;
+            &lt;scope&gt;test&lt;/scope&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    
+    &lt;build&gt;
+        &lt;plugins&gt;...&lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+                </div>
+                
+                <p style="margin-top: 20px;"><strong>Key Elements:</strong> Project coordinates (GAV), dependencies, build configuration, plugins, and profiles</p>
+            </div>
+            <div class="slide-number">8 / 10</div>
+        </div>
+
+        <!-- Slide 9: Maven Build Lifecycle -->
+        <div class="slide">
+            <h2>Maven Build Lifecycle</h2>
+            <div class="content">
+                <h3>Default Lifecycle Phases</h3>
+                <div class="grid">
+                    <div class="card">
+                        <h4>validate</h4>
+                        <p>Validate project structure</p>
+                    </div>
+                    <div class="card">
+                        <h4>compile</h4>
+                        <p>Compile source code</p>
+                    </div>
+                    <div class="card">
+                        <h4>test</h4>
+                        <p>Run unit tests</p>
+                    </div>
+                    <div class="card">
+                        <h4>package</h4>
+                        <p>Create JAR/WAR file</p>
+                    </div>
+                    <div class="card">
+                        <h4>verify</h4>
+                        <p>Run integration tests</p>
+                    </div>
+                    <div class="card">
+                        <h4>install</h4>
+                        <p>Install to local repository</p>
+                    </div>
+                    <div class="card">
+                        <h4>deploy</h4>
+                        <p>Deploy to remote repository</p>
+                    </div>
+                </div>
+                
+                <div class="code">
+# Common Maven commands
+mvn clean compile    # Clean and compile
+mvn test            # Run tests
+mvn package         # Create artifact
+mvn install         # Install locally
+                </div>
+            </div>
+            <div class="slide-number">9 / 10</div>
+        </div>
+
+        <!-- Slide 10: Maven in CI/CD -->
+        <div class="slide">
+            <h2>Maven Integration in CI/CD</h2>
+            <div class="content">
+                <h3>Benefits of Maven in CI/CD Pipeline</h3>
+                <ul>
+                    <li>Standardized build process across environments</li>
+                    <li>Automated dependency resolution and management</li>
+                    <li>Consistent artifact generation</li>
+                    <li>Integration with testing frameworks</li>
+                    <li>Support for multi-module projects</li>
+                </ul>
+                
+                <h3>Example Jenkins Pipeline with Maven</h3>
+                <div class="code" style="font-size: 0.85em;">
+pipeline {
+    agent any
+    tools {
+        maven 'Maven 3.8'
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+}
+                </div>
+            </div>
+            <div class="slide-number">10 / 10</div>
+        </div>
+    </div>
+
+    <div class="navigation" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000;">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') changeSlide(-1);
+            if (e.key === 'ArrowRight') changeSlide(1);
+        });
+
+        showSlide(0);
+    </script>
+</body>
+</html>

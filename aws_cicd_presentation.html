@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS CI/CD Pipeline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 85vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 60px;
+            display: none;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .slide.active {
+            display: flex;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-header {
+            border-bottom: 4px solid #FF9900;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #232F3E;
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #232F3E;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        h3 {
+            color: #FF9900;
+            font-size: 1.8em;
+            margin: 25px 0 15px 0;
+        }
+
+        p, li {
+            color: #333;
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 40px;
+        }
+
+        .title-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #232F3E 0%, #FF9900 100%);
+            color: white;
+        }
+
+        .title-slide h1 {
+            color: white;
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .title-slide p {
+            color: white;
+            font-size: 1.8em;
+        }
+
+        .aws-logo {
+            font-size: 5em;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        button {
+            background: #FF9900;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #232F3E;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .highlight-box {
+            background: #FFF3E0;
+            border-left: 5px solid #FF9900;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-box {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 20px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #FF9900;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .flow-item {
+            background: #FF9900;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .arrow {
+            font-size: 2em;
+            color: #FF9900;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <div class="aws-logo">☁️</div>
+            <h1>AWS CI/CD Pipeline</h1>
+            <p>CodeCommit, CodeBuild & CodeDeploy</p>
+            <p style="margin-top: 30px; font-size: 1.3em;">Complete DevOps Automation Guide</p>
+        </div>
+
+        <!-- Slide 2: Introduction to CI/CD -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>What is CI/CD?</h2>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Continuous Integration (CI):</strong> Automatically building and testing code changes</p>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Continuous Deployment (CD):</strong> Automatically deploying tested code to production</p>
+            </div>
+            <h3>Benefits:</h3>
+            <ul>
+                <li>Faster time to market</li>
+                <li>Reduced manual errors</li>
+                <li>Improved code quality</li>
+                <li>Automated testing and deployment</li>
+                <li>Better collaboration between teams</li>
+            </ul>
+            <div class="slide-number">2 / 15</div>
+        </div>
+
+        <!-- Slide 3: AWS DevOps Services Overview -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>AWS DevOps Services</h2>
+            </div>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>CodeCommit</h3>
+                    <p>Source Control</p>
+                    <p>Git-based repository hosting service</p>
+                </div>
+                <div class="card">
+                    <h3>CodeBuild</h3>
+                    <p>Build & Test</p>
+                    <p>Fully managed build service</p>
+                </div>
+                <div class="card">
+                    <h3>CodeDeploy</h3>
+                    <p>Deployment</p>
+                    <p>Automated deployment service</p>
+                </div>
+            </div>
+            <div style="margin-top: 40px;">
+                <h3>Additional Services:</h3>
+                <ul>
+                    <li><strong>CodePipeline:</strong> Orchestrates the entire CI/CD workflow</li>
+                    <li><strong>CodeArtifact:</strong> Artifact repository management</li>
+                </ul>
+            </div>
+            <div class="slide-number">3 / 15</div>
+        </div>
+
+        <!-- Slide 4: AWS CodeCommit Introduction -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>AWS CodeCommit</h2>
+            </div>
+            <p><strong>Fully managed source control service</strong> that hosts secure Git-based repositories</p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li>Secure and highly available</li>
+                <li>Encrypted at rest and in transit</li>
+                <li>No size limit on repositories</li>
+                <li>Integrates with AWS IAM for access control</li>
+                <li>Works with existing Git tools</li>
+                <li>Pull request and code review capabilities</li>
+            </ul>
+            <div class="highlight-box">
+                <p><strong>Use Case:</strong> Store your application source code, configuration files, and documentation securely in the AWS cloud</p>
+            </div>
+            <div class="slide-number">4 / 15</div>
+        </div>
+
+        <!-- Slide 5: CodeCommit Architecture -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>CodeCommit Architecture</h2>
+            </div>
+            <div class="flow-diagram">
+                <div class="flow-item">Developer</div>
+                <div class="arrow">→</div>
+                <div class="flow-item">Git Push</div>
+                <div class="arrow">→</div>
+                <div class="flow-item">CodeCommit</div>
+                <div class="arrow">→</div>
+                <div class="flow-item">Trigger</div>
+            </div>
+            <h3>How It Works:</h3>
+            <ul>
+                <li>Developers clone the repository using Git</li>
+                <li>Make changes locally and commit</li>
+                <li>Push changes to CodeCommit repository</li>
+                <li>Triggers can initiate CI/CD pipeline</li>
+                <li>Support for branches, tags, and pull requests</li>
+            </ul>
+            <div class="code-box">
+                git clone https://git-codecommit.region.amazonaws.com/v1/repos/MyRepo<br>
+                git add .<br>
+                git commit -m "Updated feature"<br>
+                git push origin main
+            </div>
+            <div class="slide-number">5 / 15</div>
+        </div>
+
+        <!-- Slide 6: AWS CodeBuild Introduction -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>AWS CodeBuild</h2>
+            </div>
+            <p><strong>Fully managed continuous integration service</strong> that compiles source code, runs tests, and produces deployable artifacts</p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li>Pay only for build time used</li>
+                <li>Pre-configured build environments</li>
+                <li>Custom build environments with Docker</li>
+                <li>Scales automatically</li>
+                <li>Parallel build execution</li>
+                <li>Integrates with CodeCommit, GitHub, S3</li>
+                <li>Built-in security scanning</li>
+            </ul>
+            <div class="highlight-box">
+                <p><strong>Benefit:</strong> No need to manage build servers - fully serverless and scalable</p>
+            </div>
+            <div class="slide-number">6 / 15</div>
+        </div>
+
+        <!-- Slide 7: CodeBuild Process -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>CodeBuild Build Process</h2>
+            </div>
+            <div class="flow-diagram">
+                <div class="flow-item">Source</div>
+                <div class="arrow">→</div>
+                <div class="flow-item">Build</div>
+                <div class="arrow">→</div>
+                <div class="flow-item">Test</div>
+                <div class="arrow">→</div>
+                <div class="flow-item">Artifact</div>
+            </div>
+            <h3>Build Specification (buildspec.yml):</h3>
+            <div class="code-box">
+version: 0.2<br>
+phases:<br>
+&nbsp;&nbsp;install:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;commands:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- npm install<br>
+&nbsp;&nbsp;build:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;commands:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- npm run build<br>
+artifacts:<br>
+&nbsp;&nbsp;files:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- '**/*'
+            </div>
+            <div class="slide-number">7 / 15</div>
+        </div>
+
+        <!-- Slide 8: CodeBuild Environment -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>CodeBuild Environments</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <h3>Managed Images:</h3>
+                    <ul>
+                        <li>Amazon Linux 2</li>
+                        <li>Ubuntu</li>
+                        <li>Windows Server</li>
+                    </ul>
+                    <h3>Runtime Versions:</h3>
+                    <ul>
+                        <li>Java, Python, Node.js</li>
+                        <li>.NET, Go, Ruby</li>
+                        <li>PHP, Android</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Compute Types:</h3>
+                    <ul>
+                        <li><strong>Small:</strong> 3 GB RAM, 2 vCPU</li>
+                        <li><strong>Medium:</strong> 7 GB RAM, 4 vCPU</li>
+                        <li><strong>Large:</strong> 15 GB RAM, 8 vCPU</li>
+                        <li><strong>X-Large:</strong> 145 GB RAM, 72 vCPU</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 30px;">
+                <p><strong>Custom Images:</strong> You can use your own Docker images for specialized build requirements</p>
+            </div>
+            <div class="slide-number">8 / 15</div>
+        </div>
+
+        <!-- Slide 9: AWS CodeDeploy Introduction -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>AWS CodeDeploy</h2>
+            </div>
+            <p><strong>Automated deployment service</strong> that deploys applications to EC2, Lambda, ECS, and on-premises servers</p>
+            <h3>Key Features:</h3>
+            <ul>
+                <li>Automated deployments with rollback</li>
+                <li>Multiple deployment strategies</li>
+                <li>Minimizes downtime during updates</li>
+                <li>Central deployment management</li>
+                <li>Health-based deployment monitoring</li>
+                <li>Blue/Green and In-place deployments</li>
+            </ul>
+            <div class="highlight-box">
+                <p><strong>Advantage:</strong> Deploy to thousands of instances without manual intervention</p>
+            </div>
+            <div class="slide-number">9 / 15</div>
+        </div>
+
+        <!-- Slide 10: CodeDeploy Deployment Types -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>Deployment Strategies</h2>
+            </div>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>In-Place Deployment</h3>
+                    <p>Application stops on instances, new version installed, then restarted</p>
+                    <p><strong>Pros:</strong> Simple, cost-effective</p>
+                    <p><strong>Cons:</strong> Brief downtime</p>
+                </div>
+                <div class="card">
+                    <h3>Blue/Green Deployment</h3>
+                    <p>New instances created with new version, traffic shifted gradually</p>
+                    <p><strong>Pros:</strong> Zero downtime, easy rollback</p>
+                    <p><strong>Cons:</strong> Requires more resources</p>
+                </div>
+            </div>
+            <h3 style="margin-top: 30px;">Traffic Shifting Options:</h3>
+            <ul>
+                <li><strong>All-at-once:</strong> Immediate full traffic shift</li>
+                <li><strong>Canary:</strong> Shift small percentage, then rest</li>
+                <li><strong>Linear:</strong> Gradual percentage increase over time</li>
+            </ul>
+            <div class="slide-number">10 / 15</div>
+        </div>
+
+        <!-- Slide 11: CodeDeploy Components -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>CodeDeploy Components</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <h3>Application</h3>
+                    <p>Unique identifier for deployment</p>
+                    <h3>Deployment Group</h3>
+                    <p>Set of instances or Lambda functions</p>
+                    <h3>Deployment Configuration</h3>
+                    <p>Rules for deployment process</p>
+                </div>
+                <div>
+                    <h3>Revision</h3>
+                    <p>Version of application code</p>
+                    <h3>AppSpec File</h3>
+                    <p>Deployment instructions</p>
+                    <h3>CodeDeploy Agent</h3>
+                    <p>Runs on target instances</p>
+                </div>
+            </div>
+            <div class="code-box" style="margin-top: 30px;">
+version: 0.0<br>
+os: linux<br>
+files:<br>
+&nbsp;&nbsp;- source: /<br>
+&nbsp;&nbsp;&nbsp;&nbsp;destination: /var/www/html<br>
+hooks:<br>
+&nbsp;&nbsp;ApplicationStart:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- location: scripts/start.sh
+            </div>
+            <div class="slide-number">11 / 15</div>
+        </div>
+
+        <!-- Slide 12: Complete Pipeline -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>Complete CI/CD Pipeline</h2>
+            </div>
+            <div class="flow-diagram" style="flex-direction: column; gap: 20px;">
+                <div class="flow-item" style="width: 80%;">1. Developer pushes code to CodeCommit</div>
+                <div class="arrow" style="transform: rotate(90deg);">→</div>
+                <div class="flow-item" style="width: 80%;">2. CodePipeline detects change</div>
+                <div class="arrow" style="transform: rotate(90deg);">→</div>
+                <div class="flow-item" style="width: 80%;">3. CodeBuild compiles and tests code</div>
+                <div class="arrow" style="transform: rotate(90deg);">→</div>
+                <div class="flow-item" style="width: 80%;">4. Artifacts stored in S3</div>
+                <div class="arrow" style="transform: rotate(90deg);">→</div>
+                <div class="flow-item" style="width: 80%;">5. CodeDeploy deploys to target environment</div>
+            </div>
+            <div class="slide-number">12 / 15</div>
+        </div>
+
+        <!-- Slide 13: Best Practices -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>Best Practices</h2>
+            </div>
+            <div class="grid-2">
+                <div>
+                    <h3>CodeCommit</h3>
+                    <ul>
+                        <li>Use branch protection rules</li>
+                        <li>Implement code reviews</li>
+                        <li>Tag releases properly</li>
+                        <li>Use IAM for access control</li>
+                    </ul>
+                    <h3>CodeBuild</h3>
+                    <ul>
+                        <li>Cache dependencies</li>
+                        <li>Use parameter store for secrets</li>
+                        <li>Optimize build specifications</li>
+                        <li>Enable build badges</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>CodeDeploy</h3>
+                    <ul>
+                        <li>Test deployments in staging first</li>
+                        <li>Use Blue/Green for production</li>
+                        <li>Configure automatic rollback</li>
+                        <li>Monitor deployment metrics</li>
+                    </ul>
+                    <h3>General</h3>
+                    <ul>
+                        <li>Automate everything</li>
+                        <li>Use CloudWatch for monitoring</li>
+                        <li>Implement proper logging</li>
+                        <li>Regular security audits</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="slide-number">13 / 15</div>
+        </div>
+
+        <!-- Slide 14: Security and Monitoring -->
+        <div class="slide">
+            <div class="slide-header">
+                <h2>Security & Monitoring</h2>
+            </div>
+            <h3>Security Features:</h3>
+            <ul>
+                <li><strong>IAM Integration:</strong> Fine-grained access control for all services</li>
+                <li><strong>Encryption:</strong> Data encrypted at rest and in transit</li>
+                <li><strong>VPC Support:</strong> Run builds in private subnets</li>
+                <li><strong>Secrets Management:</strong> Integration with AWS Secrets Manager</li>
+            </ul>
+            <h3>Monitoring Tools:</h3>
+            <ul>
+                <li><strong>CloudWatch:</strong> Logs, metrics, and alarms</li>
+                <li><strong>CloudTrail:</strong> API call auditing</li>
+                <li><strong>EventBridge:</strong> Event-driven automation</li>
+                <li><strong>SNS:</strong> Deployment notifications</li>
+            </ul>
+            <div class="slide-number">14 / 15</div>
+        </div>
+
+        <!-- Slide 15: Conclusion -->
+        <div class="slide title-slide">
+            <h1 style="font-size: 3em;">Summary</h1>
+            <div style="text-align: left; max-width: 900px; margin-top: 40px;">
+                <h3 style="color: white; font-size: 1.8em;">AWS CI/CD Services provide:</h3>
+                <ul style="font-size: 1.4em; color: white; line-height: 2;">
+                    <li>Complete automation from code to deployment</li>
+                    <li>Scalable and secure infrastructure</li>
+                    <li>Integration with existing tools and workflows</li>
+                    <li>Cost-effective pay-as-you-go pricing</li>
+                    <li>Enterprise-grade reliability and performance</li>
+                </ul>
+                <p style="margin-top: 40px; font-size: 1.5em; color: white;">Start building your CI/CD pipeline today! 🚀</p>
+            </div>
+            <div class="slide-number" style="color: white;">15 / 15</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn">← Previous</button>
+        <button id="nextBtn">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            
+            prevBtn.disabled = currentSlide === 0;
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
+
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) showSlide(currentSlide - 1);
+            if (e.key === 'ArrowRight' && currentSlide < slides.length - 1) showSlide(currentSlide + 1);
+        });
+
+        prevBtn.disabled = true;
+    </script>
+</body>
+</html>

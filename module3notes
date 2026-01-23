@@ -1,0 +1,154 @@
+notes for devops
+Devops:
+
+Linux (basic command of Linux)
+vi/nano/vim editor ( How to insert code,how to save, not save)
+
+-----------------------
+1) DC : 80-90% os is Linux based
+2) Linux is opensource tool: git,jenkins,docker,kubernetes, ansible, terraform..developed on Linux
+
+They can work on windows as well
+
+SDLC: Software development life cycle:
+
+It shows complete phase of software from planning to development.
+
+Requirement: problem which user facing/competition
+
+Samsung/iPhone
+
+Planning: what we can develop /what we cannot
+--Feasibility: budget, skill,strength,time
+
+coding-->testing-->release -->deployment
+
+--------------------
+Waterfall model
+agile 
+devops
+Lot of tools knowledge is required
+git/GitHub
+jenkins--> gitlabci/GitHub action/ aws code build/commit/
+
+basic coding skill: shell/python
+
+-->new product
+-->bug fixes (issue, security issue)
+pakage
+---------------------
+Operation--code 
+
+dev-->Write code-->package
+
+Ops-->apply the code in prod-->
+
+Plan when to apply
+
+
+raw material code-->Restrant====>final food that is pacakge
+
+
+
+Devops: where journey start with code change and end with code deployment
+
+
+-->when developer make the code changes--> end when operation apply the code change
+
+
+Dev-->who thinks that they are doing everything right, 
+a
+b
+c
+d
+e
+f
+
+
+Ops:-->which thinks that developer are not addressing the issues
+a
+b
+keep env up and run
+------------------------------------------------------------------------------
+devops
+
+21/01(notes)
+
+laptop: windows 10--upgrade to windows 11
+
+After upgrading my system  is not working..
+
+you can not use your laptop
+--------------------
+
+DC-->upgrad application-->application is not working
+
+it is going to give huge impact
+--------------------
+Blue green
+
+i will have two laptops which is running windows 10
+
+one env i will upgrad to win11, second laptop i will keep win 10
+
+-------------------------------
+
+
+git : QA, DEV, DEVOPS
+
+To manage the code
+
+git ,GitHub, clone,pull,push,add.......
+
+
+---------------------
+Jenkins/GitHub action/GitlabCI/Azure devops/Aws code build/Aws code deploy
+
+
+code-->you will write code(which will perform all activity)-->final prod
+
+pack-->testing-->releasign--
+
+CICD-->Continuous integration continuous deployment/delivery
+
+To implement the devops methodology we need to write the code, that code will perform activity which is called cicd
+---------------------------
+49 developer there who is writing one application
+
+Amit-->he will working in his dev box, writing one code feature (abc)
+
+Arun-->dev, he is also working in his dev box, writing code for another feature (def)
+
+
+ABC+DEF ==Code integration-->continuous integration
+
+dev code changes will be intergration at a centralized repo, from there the process of cicd will start.
+
+Retro-->veg
+
+CI-->code will updated on the centralized repo(remote repo) from where Jenkins (Cicd tool) will pick the code and create the package,test and release.
+
+From release part if the package has deployed in production env and monitor it is called CD.
+
+--------------------------------------
+In many cases, package is not deployed immediately production, they release the package to the staging site, the CD ..D part will delivery
+
+
+Playstore--> update is available for app (WhatsApp)
+
+Did playstore automatically update it, did it prompt and you weather you want to update or not??
+
+IT will prompt..
+
+WhatsApp package, it goes for update,then application will not be accessible during that update process.
+
+--------------
+PRoduction env, we don;t deploy directly.
+
+we raise a change window, that you will inform the users, that 12o'clock to 2 o'clock we have maintaenace window.
+
+irctc/ citi/sbi (weekend, in the midnight)
+
+irctc: cannot go and raise change window moring 10 am.
+
+night 12 o'clock.

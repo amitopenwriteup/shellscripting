@@ -1,0 +1,110 @@
+Devops
+
+Developer-->codechanges are published to centralized repo.
+
+CI
+
+git is tool-->used code management
+
+git is managing code-->git repo-->
+
+I want to share with I need to publish this git repos to git hosting sites.
+
+	.com
+GitLab.com
+bitbucket
+code commit
+
+Canary
+
+appv1 -->5 ec2 vm
+
+appv2-->1 appv1 + 4appv2
+
+Canary is the upgrade process of application
+
+app v1-->100 ec2 vm :amazon.in
+
+new upgrade appv2
+
+appv1-->appv2
+
+if you upgrade all v1 to v2, you find v2 is not at all working??
+
+It will cause application downtime, appv2.
+
+To safeguard this kind of failure, what org does they use different type upgrade
+
+
+blue/green:
+
+app v1--100 ec2 vm
+app v2-->100 more ec2 vm =200
+
+I will send the traffic to both the appv1 and appv2
+ increasing the cost.
+
+
+canary: 70-30
+appv1 :100 ec2 vm
+appv1: 70, rest 30 ec2 vm will upgrade to appv2
+
+70 app v1 30 app v2=100
+
+
+cloudflare?
+https://blog.cloudflare.com/18-november-2025-outage/
+content delivery network: edge location
+
+-----------------------
+If I give you shell script to run? What are the steps you need to do?
+
+-->create ec2 Linux vm
+-->connect			-->build server
+-->download/copy shell script
+-->Run it
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

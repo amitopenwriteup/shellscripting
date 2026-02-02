@@ -1,0 +1,96 @@
+git and GitHub
+
+Git is version control system.
+
+we have created the git repo: To create a git repo which command we will use?
+
+git init--> .git(subdirectory)
+
+Local git repo (which you will create on your development box)
+
+Remote git repo (which will be shared across multiple developers, which you create on GitHub)
+
+
+-->If I create a file, I want to staged that file for commit-> git add
+
+--> We create the commit: git commit -m "Add"
+
+-->commit id (Version id)-->track the code changes
+
+--------------
+we have created a remote git repo on the GitHub.
+
+we have mapped it using ssh authentication.
+
+------------------------------------------------------------------
+
+What is git clone?
+
+Go and create a EC2 instance (ubuntu)
+
+
+You join a development team,they are already having project on GitHub.
+
+They will give you Linux box.
+
+sshurl: git@github.com:amitopenwriteup/mystartraining.git
+
+Private key (deleted ec2 instance)-->private key also deletes
+
+
+---------------------------------------
+how many types of authentication git supports?
+
+https(username and pat) and ssh (public-private key pair)
+
+how will you identify which auth I need to use?
+
+by url
+
+If url of git clone is starting with https (Then it https based auth)
+
+If url is starting with (git@github.com) then it is ssh base auth
+
+
+Why password are not used why PAT?
+When you are configuring PAT: expiry duration +authorization
+
+
+
+-------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

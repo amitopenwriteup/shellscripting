@@ -1,0 +1,31 @@
+main-->test
+	-->feature-->test,test1
+instead of doing merge,we will add a new code into the main branch
+main-->test2
+
+commit id-->commit id main + commit id feature
+
+main-->test,test2(commit id)
+			
+feature-->test,test1(commit id)
+
+git merge feature
+
+test2 commitid test1 commit id -->creating a new commit to
+
+
+-------------
+rebase
+
+you were having test file in the main branch, that was empty (A)
+
+you created a branch feature, test file was empty (B)
+
+you went into the main branch and added the code into testfile (C)
+
+-->checkout feature branch-->git rebase main->test file is having the code
+
+
+
+
+

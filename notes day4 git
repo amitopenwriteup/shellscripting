@@ -1,0 +1,53 @@
+git add-->staging the change( I am ready for commit)
+#You got another work to complete, and you have not yet completed the current fix
+
+git commit
+
+IF code you are writing and you want save the change-->create commitid
+
+git reset --soft / --hard / --mixed
+
+a commit id abc
+b commit id def
+
+it will drop the latest commit id, and take the code changes to the staging area
+
+--mixed-->File will be completely tracked not in the staging area
+
+--hard-->changes are deleted
+
+reset 
+
+--soft means you are droping the commit id, and changes are in the staging are
+--hard means you are dropping the commit id and changes both
+--mixed mean you ard dropping the commit id and changes are still there but untracked
+
+reset-->commit id in git log command where head was pointing, was available in log in the log command or not??
+
+A-->commit id abc
+B-->commit id def
+remove A-->commit id ghi
+
+git clone --> to your repo
+
+remote repo (GitHub) +new code added
+
+
+you need to download the code changes.
+
+git fetch (there is changes in remote repo , but it will add into the local repo
+
+git pull
+
+
+
+
+
+
+
+
+
+
+
+
+

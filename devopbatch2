@@ -1,0 +1,1061 @@
+
+#13/01/26
+#which is the current effective user
+whoami
+#what is your hostname
+hostname
+#Check ip address
+ip addr
+#Read help page
+man hostname
+#press "q" to exit
+#Which linux flavor
+cat/etc/os-release
+#cat / it is a linux command to read a file and print output on current shell
+man cat
+#to check linux version
+unname-a
+unname-v
+-----------------------------------
+
+Lab 2:
+    #shows present directory: print workind directory
+    pwd
+    #create directory
+    mkdir learner
+    #Change directory
+    mkdir learner
+    #Change directory
+    cd learner
+    pwd
+    #Create empty file
+    touch test
+    #Read the file
+    cat test
+    #Extension for shell file
+    touch file.sh
+    
+    -------------------
+    #lab3
+    #Complete listing of file or directory
+    ls -l
+    # To comeout from current direcrtoey
+    cd ..
+    cd learner
+    #open the file with vi editor
+    vi test
+    #Press i to enable insert mode
+    #type it
+    this is my first code
+    #Go to normal mode: press esc key
+    #To save the file press :
+    #For saving press w, and for quit press q
+    -------------
+    notes
+    OS --is a complete package
+
+-->The specific code (software) which is written to control and manager h/w is kernel. Main engine of any os
+
+Linux kernel-->xyz-->custom desktop, software package manager
+
+Debian based-->ubuntu
+
+redhat based-- rhel, rocky Linux, centos ,amazon linux
+
+--------------------
+
+ec2 Linux vm: how you connected?
+
+Ubuntu vm: connect via ssh
+
+----------------------
+If Linux os-->if user want to perform some activity they use command prompt, that is called shell. In this shell if write script, that is called shell scripting
+bash: feature rich, lot of command avaialbe
+sh: basic , by default available in all Linux flavor
+
+windows os: two command options: cmd prompt and powershell
+--------------------------------
+
+Shell scripting: is sequence of Linux command.
+
+The Linux command which runs shell, if you keep in file, and execute then it is call shell scripting
+
+-------------------
+Task:
+0) where folder currently I am in my Linux box : pwd
+1) Create a folder: identify command: mkdir <directoryname> : mkdir amit
+2) go inside the folder: identify command: cd amit
+3) create a empty file: indenfify command:touch <filename> 
+4) Read the file: indentify: cat <filename>
+
+To modify or create a new file, we can use editors:
+
+vi,vim,nano
+
+vi: equivalent notepad is doing
+
+Compiler is software which convert the high level code to the machine lang.
+
+-------------------
+Shell: we need to mention the complier,
+In the scripting file, we present the compier/interpreter by a symbol which is call she-bang
+A shebang (#!) is a special two-character sequence at the very beginning of a script file in Unix-like operating systems, telling the kernel which interpreter (like bash, python3)
+
+#!/bin/bash (bash interpreter)
+#!/usr/bin/python (python interpreter)
+#!/usr/bin/perl (perl interpreter)
+
+Java case-->javaource code-->compile it to java byte code-->interpreter-->machine lagnguage
+-------------------------------
+
+Exercise:
+    
+explain chmod command in basic way to the first time linux leaner, give some basic example
+
+explain apt command in basic way to the first time linux leaner, give some basic example
+
+
+----------------------
+16/01 (day2)
+
+vi test.sh
+#press i to enable insert mode
+
+#!/bin/bash
+echo "first code"
+mkdir testcode
+cd testcode
+touch file
+
+#Save the file esc :wq
+
+ls -l
+#check the permission
+./test.sh
+bash test.sh
+#it will fail, since owner doesn't have permission to execute
+chmod 744 test.sh
+ls -l
+./test.sh
+ls testcode
+
+----------------------------------
+#
+apt update
+#it will fail permission denied
+sudo apt update
+#search pacakge
+sudo apt search openjdk-21-jdk
+sudo apt install openjdk-21-jdk
+sudo apt install maven -y
+
+--------------------------
+#uninstallation command
+sudo apt remove openjdk-21-jdk -y
+sudo apt remote maven -y
+
+-------------
+vi pkg.sh
+
+#!/bin/bash
+echo "installing java and maven"
+sudo apt update
+sudo apt install openjdk-21-jdk -y
+echo "intalling maven"
+sudo apt install maven -y
+ 
+#esc :wq
+chmod 744 pkg.sh
+./pkg.sh
+
+#to find the installed pacakge
+dpkg -l |grep -i openjdk
+
+ enter two times
+#copy your ssh command from ec2 connect tab
+for example
+ssh -i "jenk.pem" ubuntu@ec2-44-210-120-184.compute-1.amazonaws.com
+scp -i "jenk.pem" test.pub ubuntu@ec2-44-210-120-184.compute-1.amazonaws.com/home/ubuntu
+#connect to your ec2 vm:
+ssh -i "jenk.pem" ubuntu@ec2-44-210-120-184.compute-1.amazonaws.com
+#check for the file
+ls
+
+
+---------------------------------------
+19/01
+
+Exercise 1: Create Your First User (10 minutes)
+Difficulty: EASY
+Task: Create a new user named "developer" with a home directory and set a password.
+Step 1: Create the user
+sudo adduser developer
+When prompted:
+Enter     password: DevPass123! 
+Re-enter     password for confirmation 
+Press     Enter to skip optional fields (Full Name, Room Number, etc.) 
+Type     'Y' to confirm
+
+Step 2: Verify user creation
+# Check if user exists
+id developer
+ 
+# Check home directory was created
+sudo ls -la /home/developer
+ 
+# View user entry in passwd file
+sudo grep developer /etc/passwd
+
+Exercise2
+
+#switch user (su)
+su developer
+#it will prompt for the password
+sudo apt update
+#user is not in the  sudoers file
+
+Exercise 3
+
+exit
+whoami
+sudo apt update
+sudo ls /home
+#it will work
+
+Exercis 4
+G-->group name
+a-->which user want to add to the group
+
+sudo usermod -G sudo -a developer
+su developer
+sudo apt update
+
+
+Exercise 5 (Create key pair)
+
+ssh-keygen -t rsa
+#file name dev
+#no passprase just press enter
+cat dev.pub
+su - developer
+
+pwd
+#make sure you are in the user home directory, : /home/developer
+mkdir .ssh
+chmod 700 .ssh
+
+vi .ssh/authorized_keys
+
+chmod 600 .ssh/authorized_keys
+
+ssh -i dev developer@ec2-44-210-237-131.compute-1.amazonaws.com
+
+
+-------------------------------
+20.01
+ssh authentication
+AWS-->
+
+Linux based ec2 instance-->keypair (private key)-->public key ec2 instance
+
+some got the access on my system.
+
+Can they access my ec2 instance:
+
+username/password
+
+ssh based--> -->public
+
+private key + passp
+--------------------
+aws session: key -pair based authentication
+
+How it works?
+
+bank lockers:
+
+two set of keys: one key with owner + second key with bank manager
+
+first they ask to put your key+manager will put his key-->locker will open
+
+Owner-->private key-------------->aws (public key)
+
+send message by using private key encrypton-->(hello)encrypted--->right public key(hello) AUthenticated each other
+
+access denied public key
+
+Private: it will be always owner, you will never share it
+
+Public means: we will send to remote server for authentication (Share)
+
+using ssh protocol hand shake (public mean this something you can share it)
+
+ssh: Secure shell
+
+------------------------------------
+# for package installation I want to right code:
+
+sudo apt update
+sudo apt install maven -y
+
+--------------------------
+Req: devlop a script to install pacakge
+#Universal script, where user will provide the package, you will check package is installed or not, if package is not installed, you will check weather package is valid not, if valid we will install it.
+
+1. Code will take the package name from the user:
+
+prompt: provide package name
+
+2. I will take that package name
+
+if package is installed then
+ 
+  msg to user already installed no need to do any thing
+
+if package is not installed:
+  if package is valid:
+        go and install
+  else
+    msg the user not a valid package
+
+ ----------------
+ # in shell scripting if i want user input:
+     read -->command you can prompt user input
+
+-----------------------------------------
+Try assigment:
+
+dpkg -s maven
+echo $?
+dpkg -s test
+echo $?
+
+#basic shell script
+
+vi test.sh
+
+#!/bin/bash
+#author: yourname
+#description: package developent
+read -p "enter the pacakge name:" PKG
+echo "pacakge search $PKG"
+
+#save the file esc :wq
+chmod 744 test.sh
+./test.sh
+
+Try below labs
+
+https://github.com/amitopenwriteup/linuxtraining
+
+Question: how to route the standard output and standard error to /dev/null (Understand command)
+dpkg -s maven
+----------------------------------------------------------------------------------------------------
+notes for devops
+Devops:
+
+Linux (basic command of Linux)
+vi/nano/vim editor ( How to insert code,how to save, not save)
+
+-----------------------
+1) DC : 80-90% os is Linux based
+2) Linux is opensource tool: git,jenkins,docker,kubernetes, ansible, terraform..developed on Linux
+
+They can work on windows as well
+
+SDLC: Software development life cycle:
+
+It shows complete phase of software from planning to development.
+
+Requirement: problem which user facing/competition
+
+Samsung/iPhone
+
+Planning: what we can develop /what we cannot
+--Feasibility: budget, skill,strength,time
+
+coding-->testing-->release -->deployment
+
+--------------------
+Waterfall model
+agile 
+devops
+Lot of tools knowledge is required
+git/GitHub
+jenkins--> gitlabci/GitHub action/ aws code build/commit/
+
+basic coding skill: shell/python
+
+-->new product
+-->bug fixes (issue, security issue)
+pakage
+---------------------
+Operation--code 
+
+dev-->Write code-->package
+
+Ops-->apply the code in prod-->
+
+Plan when to apply
+
+
+raw material code-->Restrant====>final food that is pacakge
+
+
+
+Devops: where journey start with code change and end with code deployment
+
+
+-->when developer make the code changes--> end when operation apply the code change
+
+
+Dev-->who thinks that they are doing everything right, 
+a
+b
+c
+d
+e
+f
+
+
+Ops:-->which thinks that developer are not addressing the issues
+a
+b
+keep env up and run
+------------------------------------------------------------------------------
+devops
+
+21/01(notes)
+
+laptop: windows 10--upgrade to windows 11
+
+After upgrading my system  is not working..
+
+you can not use your laptop
+--------------------
+
+DC-->upgrad application-->application is not working
+
+it is going to give huge impact
+--------------------
+Blue green
+
+i will have two laptops which is running windows 10
+
+one env i will upgrad to win11, second laptop i will keep win 10
+
+-------------------------------
+
+
+git : QA, DEV, DEVOPS
+
+To manage the code
+
+git ,GitHub, clone,pull,push,add.......
+
+
+---------------------
+Jenkins/GitHub action/GitlabCI/Azure devops/Aws code build/Aws code deploy
+
+
+code-->you will write code(which will perform all activity)-->final prod
+
+pack-->testing-->releasign--
+
+CICD-->Continuous integration continuous deployment/delivery
+
+To implement the devops methodology we need to write the code, that code will perform activity which is called cicd
+---------------------------
+49 developer there who is writing one application
+
+Amit-->he will working in his dev box, writing one code feature (abc)
+
+Arun-->dev, he is also working in his dev box, writing code for another feature (def)
+
+
+ABC+DEF ==Code integration-->continuous integration
+
+dev code changes will be intergration at a centralized repo, from there the process of cicd will start.
+
+Retro-->veg
+
+CI-->code will updated on the centralized repo(remote repo) from where Jenkins (Cicd tool) will pick the code and create the package,test and release.
+
+From release part if the package has deployed in production env and monitor it is called CD.
+
+--------------------------------------
+In many cases, package is not deployed immediately production, they release the package to the staging site, the CD ..D part will delivery
+
+
+Playstore--> update is available for app (WhatsApp)
+
+Did playstore automatically update it, did it prompt and you weather you want to update or not??
+
+IT will prompt..
+
+WhatsApp package, it goes for update,then application will not be accessible during that update process.
+
+--------------
+PRoduction env, we don;t deploy directly.
+
+we raise a change window, that you will inform the users, that 12o'clock to 2 o'clock we have maintaenace window.
+
+irctc/ citi/sbi (weekend, in the midnight)
+
+irctc: cannot go and raise change window moring 10 am.
+
+night 12 o'clock.
+
+------------------------------------------------------
+#shell script
+vi test.sh
+
+#!/bin/bash
+read -p "provide package name:" PKG
+dpkg -s $PKG > /dev/null 2>&1
+if [ $? -eq 0 ];then
+  echo "package '$PKG' is alreday installed"
+else
+  echo "pacakge is note installed"
+fi
+
+#save the script
+chmod 744 test.sh
+./test.sh
+
+linux booting process
+
+https://www.freecodecamp.org/news/the-linux-booting-process-6-steps-described-in-detail/
+
+#Assignment: now you need to find the command , if package is not installed, is the pacakge is a valid package or not, which command we can use in ubuntu??
+
+apt-cache policy <package-name>
+
+vi test.sh
+
+#!/bin/bash
+# Ask user for package name
+read -p "Enter package name: " PKG
+# Check if package is already installed
+if dpkg -s "$PKG" &> /dev/null; then
+    echo "Package '$PKG' is already installed."
+    exit 0
+fi
+echo "Package '$PKG' is not installed."
+# Check if package exists in repository
+if apt-cache show "$PKG" &> /dev/null; then
+    echo "Package '$PKG' is available. Installing..."
+    sudo apt update
+    sudo apt install -y "$PKG"
+    if [ $? -eq 0 ]; then
+        echo " Package '$PKG' installed successfully."
+    else
+        echo " Failed to install package '$PKG'."
+    fi
+else
+    echo "Package '$PKG' does not exist in repositories."
+fi
+
+
+-----------------------------------------------------------------------------
+30/01
+Lab1:
+    
+    Create Ec2 ubuntu vm and connect
+    git version
+    
+Lab2
+
+mkdir mycode
+cd mycode
+git version
+git status
+# fatal: not a git repository 
+git init
+ls -la
+git status
+# no error will come
+cd ..
+git status
+#you will again get error
+cd mycode
+git status
+
+--------------------------------
+Lab 3
+
+touch test
+git status
+#Untracked file
+git add test
+git status
+git config --global user.name learner
+git config --global user.email learner@ow.com
+git config --global --list
+git commit -m "adding new file"
+git status
+git log
+git branch
+ls
+#check the detail, author,email and message
+
+-----------
+Lab4
+
+ssh-keygen -t rsa
+#no file change,no path chagne,no passprase
+
+cat /home/ubuntu/.ssh/id_rsa.pub
+
+----------------------------
+02/02
+Lab2
+
+1) Create a new git repo on github with Readme file
+2) go to repository code section and take https url
+#take you to the user home directory
+cd ~
+git clone <httpsur>
+cd  yourreponame
+
+Example:
+    git clone https://github.com/amitopenwriteup/testhttps.git
+    cd testhttps
+
+Lab3
+ls
+touch test
+git add test
+git commit -m "Adding new file"
+git push origin main
+
+--------------------
+Lab 4:
+
+#In your local git repo
+git status
+git branch
+#observe the branch, where * is coming
+git branch feature
+git branch
+git checkout feature
+git branch
+touch newfile
+git add newfile
+git commit -m "add file to branch"
+git status
+git checkout main
+ls
+#you will not see file "newfile"
+git checkout feature
+ls
+#you will find the file
+
+
+-------------------------------
+03/02
+
+Lab1:
+
+cd ~
+mkdir testingmerge
+cd testingmerge
+git init
+touch test
+git add test
+git commit -m "Adding to main"
+git branch  -M  main
+git status
+
+git branch feature
+git checkout feature
+touch test1
+git add test1
+git commit -m "Adding to feature"
+
+git checkout main
+touch test3
+git add test3
+git commit -m "Adding to main"
+
+git merge feature -m "recursive merge"
+
+#
+.
+
+Lab 4:
+cd ~
+mkdir stashtest
+cd stashtest
+git init
+touch main
+git add main
+git commit -m "Add"
+git branch -M main
+git branch feature
+touch learner
+git add learner
+git status
+#it will show ready for commit
+git stash save
+git status
+#Tree will be clean, nothing to commit
+git stash list
+git stash apply 0
+git status
+#again ready to commit will come
+git stash list
+#you will find data as well
+git stash drop 0
+
+git stash save
+git stash list
+git status
+git stash pop 0
+git status
+git stash list
+
+
+------------------
+04/02
+
+cd ~
+mkdir resettest
+cd resetttest
+git init
+touch a
+git add a
+git commit -m "a"
+touch b
+git add b
+git commit -m "adding b"
+git log
+git reset --soft  <commitid>
+#replace with your <commitd>
+example#  git reset --soft b63c47d7e499744bfb47d23740f373cbc0190f06
+git status
+#file will be in staging area
+git add b
+git commit -m "adding b"
+git status
+git reset --mixed <commitid>
+#replace with your <commitd>
+example#  git reset --mixed b63c47d7e499744bfb47d23740f373cbc0190f06
+git status
+
+git add b
+git commit -m "adding b"
+git status
+git reset --hard <commitid>
+#replace with your <commitd>
+example#  git reset --hard b63c47d7e499744bfb47d23740f373cbc0190f06
+git status
+
+-----------------
+Lab2
+
+cd ~
+mkdir testreset
+cd testreset
+git init
+touch a
+git add a
+git commit -m "A"
+touch b 
+git add b
+git commit -m "B"
+git log
+git reset <commitid> #of file a
+#ctrl +x press 
+git log
+git status
+ls
+#whichever current head is showing
+git revert <commitid>
+#press ctrl+x
+git log
+
+git reset --hard <commit id of B">
+git log
+
+
+----------------------------
+#git fetch/pull
+1) go to the github and go to your repo
+2) take the https url and do the git clone
+
+git clone <httpsurl>
+
+3) cd <reponame>
+
+example
+ git clone https://github.com/amitopenwriteup/mystartraining.git
+ cd mystarttraining
+ 
+ 4) git status
+ 
+ 5) now go to the github and add one new file into your repo
+ 6) go to linux box to your local git repo
+ git fetch origin main
+ git status
+ 
+ #one commit behind from origin/main
+ 7) git pull origin main
+ git status
+ 
+--------------------------------------------------------------
+
+06/02
+
+Lab1
+
+mkdir gittest
+cd gittest
+git init
+git config --global user.name learner
+git config --global user.email learner@ow.com
+touch password
+touch abc.txt
+touch abc
+vi .gitignore
+#mentione below entery
+password
+*.txt
+#save the file esc :wq
+git add .gitignore
+git commit -m "Adding .gitignore file"
+git status
+#abc file will come under untracked, other two files will not be there
+
+----------------
+Lab2
+
+cd ~
+mkdir gitdiff
+cd gitdiff
+git init
+touch mycode
+git add mycode
+git commit -m "Added file"
+git log --oneline
+git show <commitid>
+#highlighted in bold replace with your commit id
+vi mycode
+#!/bin/bash
+echo "hello"
+#save the file
+git add mycode
+git commit -m "Added file"
+git log --oneline
+git show <commitid>
+#highlighted in bold replace with your commit id
+vi mycode
+#!/bin/bash
+echo "hi"
+#save the file
+git add mycode
+git commit -m "Added file"
+git log --oneline
+git show <commitid>
+#highlighted in bold replace with your commit id
+git log --oneline
+git diff <firstcommid> <latestcommit id>
+
+Lab 3
+vi mycode
+#!/bin/bash
+echo "hi"~3
+echo "hello"
+#save the file
+git add mycode
+git commit -m "mycode"
+git log --oneline
+git rebase -i HEAD~3
+#Editor will open
+pick <commitid>
+pick <commiid>
+pick <commitid>
+
+#chage other two pick to squash
+pick <commitid>
+squash  <commiid>
+squash <commitid>
+
+#ctrl x press enter
+#ctrl x press enter
+git log --oneline
+#only two commit id will be there
+
+Lab4:
+create a branch: bugtest
+Checkout the branch
+create a file: bugfix
+perform commit add 
+git show
+
+git branch bugtest
+git checkout bugtest
+touch bugfix
+git add bugfix
+git commit -m "add bugfix"
+git show
+
+#cherry pick
+git log --oneline #note down the current commit id
+git checkout master
+ls
+#you will find only mycode file
+git cherry-pick <commitid of branch which you noted>
+ls
+#you will find bugfix file as well
+git log --oneline
+git log bugtest --oneline 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

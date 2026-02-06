@@ -1,0 +1,21 @@
+Tracking the code changes
+
+mycode-->add/commit -->a
+mycode-->echo "hello" -->add/commit-->b
+
+git show b
+
+what was there in previous version and what is there in the current version
+
+diff git a/mycode (representing pervious version) b/mycode (represting current version)
+
+No code 
+++echo "hello"
+
+branch
+
+it was having some old code
+
+current working branch you have modified the code..that is not working
+
+you will pick old code commit id from the previous branch and apply to current working branch
